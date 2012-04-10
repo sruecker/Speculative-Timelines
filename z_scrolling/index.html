@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Bront? ? Timeline</title>
+        <script src="jquery1.7.1.js" type="text/javascript" charset="utf-8"></script>
+        <script src="lines.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+		body {		
+			background-image:url('bg_gradient.png');
+			background-repeat:repeat-x;
+		}
+		</style>
+        <script type="text/javascript" charset="utf-8">
+        // <!-- abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-=_+[]{}\|;':",./<>?`~!@#$%^&*() -->
+    window.onload = function () {
+			var editing = 0;
+			var current_month = 0;
+			var month_dataset = {};
+console.log('a'+window.event_dataset);
+function addmonth(title,mlid,natural_distance){
+	newmonth = {'mlid': mlid, 'title': title, 'natural_distance': natural_distance};
+	month_dataset[mlid] = newmonth;
+}
+function addevent(title,ebid,natural_distance,text,who,height,width,x){
+	return;
+	newevent = {'ebid': ebid, 'title': title, 'natural_distance': natural_distance, 'text':text, 'who':who, 'height':height, 'width':width, 'x':x };
+	event_dataset[ebid] = newevent;
+}
+
+
+			$('#increase').click(function(){
+				current_month += 1;
+				redraw_everything();
+			});
+			$('#decrease').click(function(){
+				current_month -= 1;
+				redraw_everything();
+			});
+
+function redraw_everything(){
+	for (month in month_dataset){
+		data = get_line_data(month_dataset[month].natural_distance-current_month);
+		$('#ml_'+month_dataset[month].mlid).animate( {width:data.length,top:data.drop,left:data.indent,opacity:opacity}, 500 );
+		textdrop = data.drop-10;
+		textindent = data.indent + data.length + 10;	
+		$('#mlt_'+month_dataset[month].mlid).animate( {top:textdrop,left:textindent,opacity:opacity}, 500 );
+	}
+	for (eevent in event_dataset){
+		distance = event_dataset[eevent].natural_distance-current_month;
+		if (distance < -3) {
+			$('#eb_'+event_dataset[eevent].ebid).hide();
+			$('#ebt_'+event_dataset[eevent].ebid).hide();
+		}
+		else
+		{
+		data = get_box_data(distance,event_dataset[eevent].height,event_dataset[eevent].width,event_dataset[eevent].x);
+			$('#eb_'+event_dataset[eevent].ebid).show();
+			$('#ebt_'+event_dataset[eevent].ebid).show();
+		$('#eb_'+event_dataset[eevent].ebid).animate( {height:data.height,width:data.width,top:data.drop,left:data.indent,opacity:data.opacity}, 500 );		
+		$('#eb_'+event_dataset[eevent].ebid).css({'font-size':data.fontsize+'px'});		
+		//, 'font-size':data.fontsize}
+		h = (data.titleheight-data.height);
+		d = (data.drop-h);
+		$('#ebt_'+event_dataset[eevent].ebid).animate( {height:h,width:data.width+4,top:d+'px',left:data.indent,opacity:data.opacity}, 500 );		
+		$('#ebt_'+event_dataset[eevent].ebid).css({'font-size':data.fontsize+'px'});		
+		
+		}
+	}
+}
+			addevent('Test','t17',1,'This is a test','Owner',200,150,1050);
+			addevent('Test','t18',3,'This is a test','Owner',200,150,850);
+			addevent('Test','t19',7,'This is a test','Owner',200,150,150);
+			addevent('Test','t10',11,'This is a test','Owner',200,150,1050);
+			addevent('Test2','t2',7,'This is another test. IT has a whole lot of text. it just goes on and on and on andon . For quite a while.','Owner',250,200,250);
+
+			addmonth('January 1847','jan0',-11);
+			addmonth('February 1847','feb0',-10);
+			addmonth('March 1847','mar0',-9);
+			addmonth('April 1847','apr0',-8);
+			addmonth('May 1847','may0',-7);
+			addmonth('June 1847','jun0',-6);
+			addmonth('July 1847','jul0',-5);
+			addmonth('August 1847','aug0',-4);
+			addmonth('September 1847','sep0',-3);
+			addmonth('October 1847','oct0',-2);
+			addmonth('November 1847','nov0',-1);
+			addmonth('December 1847','dec0',0);
+			addmonth('January 1848','jan',1);
+			addmonth('February 1848','feb',2);
+			addmonth('March 1848','mar',3);
+			addmonth('April 1848','apr',4);
+			addmonth('May 1848','may',5);
+			addmonth('June 1848','jun',6);
+			addmonth('July 1848','jul',7);
+			addmonth('August 1848','aug',8);
+			addmonth('September 1848','sep',9);
+			addmonth('October 1848','oct',10);
+			addmonth('November 1848','nov',11);
+			addmonth('December 1848','dec',12);
+			addmonth('January 1849','jan2',13);
+			addmonth('February 1849','feb2',14);
+			addmonth('March 1849','mar2',15);
+			addmonth('April 1849','apr2',16);
+			addmonth('May 1849','may2',17);
+			addmonth('June 1849','jun2',18);
+			addmonth('July 1849','jul2',19);
+			addmonth('August 1849','aug2',20);
+			addmonth('September 1849','sep2',21);
+			addmonth('October 1849','oct2',22);
+			addmonth('November 1849','nov2',23);
+			addmonth('December 1849','dec2',24);
+			for (month in month_dataset){
+				monthline(month_dataset[month].title,month_dataset[month].mlid,month_dataset[month].natural_distance);
+			}
+			for (eevent in event_dataset){
+				eventbox(event_dataset[eevent]);
+			}
+
+			$('#increase').css({position:'fixed',	top:'551px', left:'600px'});
+			$('#decrease').css({position:'fixed',	top:'515px', left:'600px'});
+
+			for (eevent in event_dataset){
+				$('#eb_'+event_dataset[eevent].ebid).click(function(){
+					if (editing==0){
+						i = $(this).html();
+						h = $(this).height()-4;
+						w = $(this).width()-4;
+						$(this).html('<input id="'+'i'+this.id+'" type="textarea" rows="7" style="height:'+h+'px;width:'+w+'px" value="'+i+'"></input>');
+						editing = 'i'+this.id;
+					}
+					else {
+						if ('i'+this.id != editing) { //close the input
+							inner = $('#'+editing).val();
+							$('#'+editing.substr(1)).html(inner);
+							
+							editing = 0
+						}
+					
+					}
+
+				});
+			}
+			$('#gap50').click(function(){
+				setgap(50);
+				redraw_everything();
+			});
+			$('#gap100').click(function(){
+				setgap(100);
+				redraw_everything();
+			});
+			$('#gap150').click(function(){
+				setgap(150);
+				redraw_everything();
+			});
+			$('#focal300').click(function(){
+				setfocal(300);
+				redraw_everything();
+			});
+			$('#focal600').click(function(){
+				setfocal(600);
+				redraw_everything();
+			});
+			$('#focal900').click(function(){
+				setfocal(900);
+				redraw_everything();
+			});
+			$('#platform250').click(function(){
+				setplatform(250);
+				redraw_everything();
+			});
+			$('#platform500').click(function(){
+				setplatform(500);
+				redraw_everything();
+			});
+			$('#platform750').click(function(){
+				setplatform(750);
+				redraw_everything();
+			});
+
+    };
+        </script>
+        <script src="j_data.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body class="gradient">
+	<div style="color:#fff">
+	(Click number to change display variables - middle is default)<br/>
+	Gap between lines: <a id="gap50">50</a> or <a id="gap100">100</a> or <a id="gap150">150</a><br/>
+	Focal length: <a id="focal300">300</a> or <a id="focal600">600</a> or <a id="focal900">900</a><br/>
+	Height above lines: <a id="platform250">250</a> or <a id="platform500">500</a> or <a id="platform750">750</a><br/>
+	(Try high focal and low height or vice versa)
+	</div>
+	<div >
+	<a id="decrease"><img src="cursor_back.png"</a>
+	<a id="increase"><img src="cursor_forward.png"</a>
+	</div>
+        <div id="holder"></div>
+    </body>
+</html>
