@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Bront&#235 . Timeline</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="jgrowl/jquery.jgrowl_minimized.js" type="text/javascript" charset="utf-8">
+		</script>
+        <link rel="stylesheet" href="jgrowl/jquery.jgrowl.css" type="text/css" >
+        <link rel="stylesheet" href="basic.css" type="text/css">
+        <script src="raphael-min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="helper.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+		</script>
+        <script type="text/javascript" charset="utf-8">
+			function date2xy(ldate,yindent,col,firstyear) {
+				d = ldate.getDate();
+				m = ldate.getMonth()+1; //from zero-base to 1-12
+				mx = m%3 ; //zero base, xpos
+				mx = mx==0 ? 2 : mx - 1;
+				my = Math.floor((m-1)/3) ;
+				dx = d%7 ; //zero base
+				dx = dx==0 ? 6 : dx - 1; 
+				dy = Math.floor((d-1)/7) ;
+				
+				y = ldate.getYear() + 1900;
+				yy = (y - firstyear) * 324;
+				
+				colx = col*324;
+				//console.log(d,m,mx,my,dx,dy);
+				//assume first year
+				return new Array( (1+(8*mx)) *12 + dx*12 + colx, yindent+ (1+6*my) *12 + dy*12 + yy) ;
+			}
+			function str2date(date) {
+				var a = date.split('-');
+				//month is zero-base
+				var ret = new Date(parseInt(a[0]),parseInt(a[1])-1,parseInt(a[2]));
+				return ret;
+			}
+            window.onload = function () {
+			//$.jGrowl.defaults.position = 'top-left';
+			//$('#growl').jGrowl.defaults.position = 'top-right';
+				//init date
+				var dateElems = new Array();
+				dateElems.push( new Array( "dayspan", "1842-11-8", 1, "On her return to Haworth from Brussels, Emily Bront&#235 again took up the management of the household", 5, 1 ) );
+				dateElems.push( new Array( "month", "1842-11-1", 2, "Charlotte Bront&#235 reluctantly set out to accompany Anne, whose health was failing rapidly, to Scarborough, together with Ellen Nussey", 0, 1 ) );
+				dateElems.push( new Array( "day", "1843-11-7", 1, "In a letter to her publisher, Charlotte Bront&#235 reported with concern that her sister Emily was too ill to write: she had a cough and fever", 0, 1 ) );
+				dateElems.push( new Array( "bigday", "1843-12-19", 1, "Emily Bront&#235 died of consumption at the age of thirty, at Haworth in Yorkshire", 0, 1 ) );
+
+				dateElems.push( new Array( "day", "1841-3-2", 2, "Charlotte Bront&#235 began working as governess for ¥20 a year at Upperwood House, near Rawdon", 0, 1 ) );
+				dateElems.push( new Array( "day", "1843-2-8", 2, "Emily and Charlotte Bront&#235 left for further schooling in Brussels, stopping for three days in London en route", 0, 1 ) );
+				dateElems.push( new Array( "day", "1843-2-8", 1, "Emily and Charlotte Bront&#235 left for further schooling in Brussels, stopping for three days in London en route", 0, 1 ) );
+				dateElems.push( new Array( "day", "1842-10-29", 2, "Elizabeth Branwell, the aunt who had stepped in after the death of the Bront&#235s' mother, died; Emily and Charlotte Bront&#235 returned from Brussels", 0, 1 ) );
+				dateElems.push( new Array( "day", "1843-1-21", 2, "Having mourned her aunt, Charlotte Bront&#235 returned to the Pensionnat Heger as a teacher, travelling alone to Brussels", 0, 1 ) );
+				dateElems.push( new Array( "dayfade", "1843-12-31", 2, "Charlotte Bront&#235 returned to Haworth from Brussels", 0, 1 ) );
+				dateElems.push( new Array( "day", "1843-9-24", 2, "Branwell Bront&#235 died of tuberculosis", 0, 1 ) );
+				dateElems.push( new Array( "day", "1844-5-23", 2, "Charlotte Bront&#235 reluctantly set out to accompany Anne, whose health was failing rapidly, to Scarborough, together with Ellen Nussey", 0, 1 ) );
+				dateElems.push( new Array( "day", "1844-6-25", 2, "Charlotte Bront&#235 went from London to her friend Ellen Nussey's in Yorkshire; from there she went on to Edinburgh to join her friends George Smith and his sister Eliza for a couple of days", 0, 1 ) );
+				dateElems.push( new Array( "weekspan", "1844-12-1", 2, "Charlotte Bront&#235 visited Harriet Martineau at her home The Knoll, in the Lake District, where she asked her host to mesmerize her", 0, 1 ) );
+				dateElems.push( new Array( "day", "1845-4-4", 2, "Charlotte Bront&#235 received her third proposal when James Taylor, the managing clerk of Smith, Elder, and Co., asked her to marry him; she refused", 0, 1 ) );
+				dateElems.push( new Array( "day", "1845-6-27", 2, "Charlotte Bront&#235 visited Elizabeth Gaskell in Manchester on her way back to Haworth", 0, 1 ) );
+				dateElems.push( new Array( "day", "1844-11-13", 2, "Arthur Bell Nicholls asked Charlotte Bront&#235 to marry him; she declined, and her father violently opposed the match", 0, 1 ) );
+				dateElems.push( new Array( "day", "1845-5-1", 2, "Charlotte Bront&#235 returned Gaskell's visit with a four-day stay in Manchester", 0, 1 ) );
+				dateElems.push( new Array( "bigday", "1845-6-29", 2, "Charlotte Bront&#235 married curate Arthur Bell Nicholls. They honeymooned in Wales and his native Ireland", 0, 1 ) );
+				dateElems.push( new Array( "bigday", "1846-3-31", 2, "Charlotte Bront&#235, Mrs Arthur Bell Nicholls, died at Haworth of a chill, which was called tuberculosis. It is now generally supposed that she died because she was weakened by exceptionally heavy morning sickness in her pregnancy", 0, 1 ) );
+				dateElems.push( new Array( "day", "1842-4-8", 3, "Anne Bront&#235 left home for a short period as a governess at Blake Hall, near Mirfield", 0, 1 ) );
+				dateElems.push( new Array( "bigday", "1844-5-28", 3, "Anne Bront&#235 died of consumption at Scarborough in Yorkshire", 0, 1 ) );
+
+				var earliest_year = 1842;
+				var latest_year = 1846;
+				//raphael
+                var r = Raphael("holder", 1200, 5000);
+
+				ybase = 20;
+				add_year_cal(r,3,earliest_year,0,20);
+				year = earliest_year;
+				while (year < latest_year){
+					year++;
+				
+					ybase+=324;
+					add_year_cal(r,3,year,0,ybase);
+				}
+				r.text(146,11,String("Emily")).scale(2,2).attr({"fill":"#000"});
+				r.text(476,11,String("Charlotte")).scale(2,2).attr({"fill":"#000"});
+				r.text(798,11,String("Anne")).scale(2,2).attr({"fill":"#000"});
+				//lets go
+				var l = r.path("M438,374T114,374z");
+				l.attr({"stroke":"red","stroke-opacity":0.3});
+				for (delem in dateElems){
+					col = dateElems[delem][2] - 1; //zero-base
+					ds = str2date(dateElems[delem][1]);
+					var xy = date2xy(ds,20,col,earliest_year);
+					//if (dateElems[delem][1] =="1842-2-8") console.log("f:"+xy);
+					
+					if (dateElems[delem][0] == "month"){
+						console.log('month');
+						c1 = r.rect(xy[0],xy[1],12*7,12*5,2); //6 is half 12
+						c1.attr({"fill":"blue","fill-opacity":0.3});
+						(function () {
+							var label = String(dateElems[delem][1])+"<br/>"+dateElems[delem][3];
+							c1.node.onclick = function() { $('#growl').jGrowl(label, {glue: "before"});
+							console.log(label);
+							};
+						})();
+					}
+					if (dateElems[delem][0] == "dayspan"){
+						console.log("dayspan");
+						cbx = xy[0];
+						cb = r.rect(cbx,xy[1],12,12,2); //6 is half 12
+						cb.attr({"fill":"blue","fill-opacity":0.3});
+						(function () {
+							var label = String(dateElems[delem][1])+"<br/>"+dateElems[delem][3];
+							cb.node.onclick = function() { $('#growl').jGrowl(label, {glue: "before"});
+							console.log(label);
+							};
+						})();
+						
+						function a() {
+						    cb.animate({x : cbx+(12*6), fill : '#00f'}, 1000, b);
+						}
+						function b() {
+						    cb.animate({x : cbx, fill : '#f00'}, 1000, a);
+						}
+						a();
+
+					}
+					if (dateElems[delem][0] == "weekspan"){
+						console.log("weekspan");
+						cby = xy[1];
+						cws = r.rect(xy[0],xy[1],12*7,12,2); //6 is half 12
+						cws.attr({"fill":"blue","fill-opacity":0.3});
+						(function () {
+							var label = String(dateElems[delem][1])+"<br/>"+dateElems[delem][3];
+							cws.node.onclick = function() { $('#growl').jGrowl(label, {glue: "before"});
+							};
+						})();
+						
+						function aws() {
+						    cws.animate({y : cby + (4*12), fill : '#00f'}, 1000, bws);
+						}
+						function bws() {
+						    cws.animate({y : cby, fill : '#f00'}, 1000, aws);
+						}
+						aws();
+
+					}
+					if (dateElems[delem][0] == "day"){
+						var c = r.circle(xy[0]+6,xy[1]+6,6); //6 is half 12
+						c.attr({"fill":"red","fill-opacity":0.7});
+						(function () {
+							var label = String(dateElems[delem][1])+"<br/>"+dateElems[delem][3];
+							c.node.onclick = function() { $('#growl').jGrowl(label, {glue: "before"});
+							};
+						})();
+					}
+					if (dateElems[delem][0] == "dayfade"){
+						var c = r.circle(xy[0]+6,xy[1]+6,15); //6 is half 12
+						c.attr({"fill":"#cc3333","fill-opacity":0.3});
+						c.attr({"fill":"#cc3333","stroke-opacity":0.2});
+						(function () {
+							var label = String(dateElems[delem][1])+"<br/>"+dateElems[delem][3];
+							c.node.onclick = function() { $('#growl').jGrowl(label, {glue: "before"});
+							};
+						})();
+						//anim = Raphael.animation({"stroke-opacity":0.0,"fill-opacity":0.0},2000); 
+						//anim = anim.repeat(50);
+						//c = c.animate(anim);
+					}
+					if (dateElems[delem][0] == "bigday"){
+						console.log(xy);
+						var c = r.circle(xy[0]+6,xy[1]+6,6); //6 is half 12
+						c.attr({"fill":"red","fill-opacity":0.7});
+						(function () {
+							var label = String(dateElems[delem][1])+"<br/>"+dateElems[delem][3];
+							c.node.onclick = function() { $('#growl').jGrowl(label, {glue: "before"});
+							};
+						})();
+						//Raphael.animation(params, ms, [easing], [callback])
+						var c1 = r.circle(xy[0]+6,xy[1]+6,7); //6 is half 12
+						c1.attr({"stroke":"red","stroke-opacity":0.7});
+						anim = Raphael.animation({"r":20},1000); 
+						anim = anim.repeat(50);
+						c1 = c1.animate(anim);
+					}
+				}
+//				[252, 596]
+				anim = Raphael.animation({"r":20},1000); 
+				anim = anim.repeat(50);
+				var c1 = r.circle(252+324+6,596+6,7); //6 is half 12
+				c1.attr({"stroke":"red","stroke-opacity":0.7});
+				c1 = c1.animate(anim);
+				c2 = r.circle(252+324+324+6,596+6,7); //6 is half 12
+				c2.attr({"stroke":"red","stroke-opacity":0.7});
+				c2.animate(anim);
+				//[828, 788]
+				c3 = r.circle(828-324+6,788+6,7); //6 is half 12
+				c3.attr({"stroke":"red","stroke-opacity":0.7});
+				c3.animate(anim);
+            };
+        </script>
+    </head>
+    <body>
+
+		<div id="growl" style="width:150px" class="top-right"></div>        
+        <div id="holder" style="width:800px;position:absolute;left:30px;top:0px"></div>
+    </body>
+</html>
