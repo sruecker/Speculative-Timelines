@@ -1,7 +1,7 @@
 The different version of Speculative-Timeline are in 3 folders:
 
-'z_scrolling' folder is the newest version
+'z_scrolling' folder version has text as boxes that scroll into the depth of the screen
 
-'topdown' is the one that looks too much like a video game
+'topdown' folder version is arranged close to a traditional calender. Its graphics currently look too much like a video game
 
-'unity' is the Unity version
+'unity' is the Unity version. The current code in the repository builds off a 'basic' unity framework with XML reading, etc that hasn't been uploaded yet
